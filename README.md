@@ -40,7 +40,7 @@ the ordering.
 | --- | --- |
 | `01_CompanionObjectStatic.kt` | the old way: `companion object` + `@JvmStatic`, plus the `Companion` allocation |
 | `02_CompanionBlockStatic.kt` | companion blocks become static members, companion extensions become statics on the file class |
-| `03_MultiplatformAndExpect.kt` | one annotation per platform (`@JvmStatic`, `@JsStatic`), and why `expect` generates no static |
+| `03_MultiplatformAndExpect.kt` | pointer to the `multiplatform` subproject (see below) |
 | `src/test/kotlin/examples/03_static/JUnitStaticTest.kt` | JUnit `@BeforeClass` works **without** `@JvmStatic` |
 
 Proof in bytecode:
@@ -52,6 +52,32 @@ Proof in bytecode:
 `Parser` has `public static final Parser parse(String)` and no `Parser$Companion`
 at all, while `LegacyParser` still carries `LegacyParser$Companion` and a static
 `Companion` field.
+
+#### The `multiplatform` subproject
+
+Per-platform static annotations (problem #3) and `expect`/`actual` matching
+(problem #5) need more than one target, so they live in `multiplatform/`
+(JVM + JS):
+
+| File | Shows |
+| --- | --- |
+| `commonMain/.../Clock.kt` | `expect class` with a `companion` block — no `@JvmStatic`/`@JsStatic` anywhere |
+| `jvmMain/.../Clock.jvm.kt` | the actual, compiled to a plain JVM static |
+| `jsMain/.../Clock.js.kt` | the actual for JS |
+| `commonMain/.../Timeout.kt` | `expect class Timeout { companion { fun ofSeconds(...) } }` |
+| `jvmMain/.../Timeout.jvm.kt` | `actual typealias Timeout = java.time.Duration` — a **Java static** actualizes the companion block member |
+
+```bash
+./gradlew :multiplatform:runJvm
+./gradlew :multiplatform:jsNodeDevelopmentRun
+./gradlew :multiplatform:javapMultiplatform
+```
+
+Two details worth knowing:
+
+- The `companion` block itself carries no `actual`; only its members do.
+- KEEP §4.2.1 specifies JS `static` class members, but Kotlin 2.5.0-Beta1 still
+  lowers them to module-level functions. The spec is ahead of the JS backend here.
 
 ### 4. Extending existing Java classes — `04_javatypes/`
 

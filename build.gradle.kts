@@ -1,5 +1,7 @@
 plugins {
     kotlin("jvm") version "2.5.0-Beta1"
+    // Applied by the `multiplatform` subproject; declared here so both share a version.
+    kotlin("multiplatform") version "2.5.0-Beta1" apply false
 }
 
 repositories {
