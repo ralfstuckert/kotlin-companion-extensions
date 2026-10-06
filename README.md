@@ -17,6 +17,12 @@ The examples are ordered by topic. Each topic is one numbered directory under
 (`examples.typelevel`, `examples.statics`, ...) so only the directory carries
 the ordering.
 
+### 0. Why this is not enough — `00_motivation/`
+
+| File | Shows |
+| --- | --- |
+| `01_CompanionObjectExtension.kt` | extending a companion *object* — possible since Kotlin 1.0, but only if the author wrote one |
+
 ### 1. Extension functions and properties on type level — `01_typelevel/`
 
 | File | Shows |
@@ -24,7 +30,7 @@ the ordering.
 | `01_InstanceExtension.kt` | the baseline: an extension with an *instance* receiver |
 | `02_CompanionFunction.kt` | `companion fun User.anonymous()` — no companion object needed |
 | `03_CompanionProperty.kt` | `companion val` / `var` / `const val` on type level |
-| `04_CompanionBlock.kt` | the same from the type owner's side, via a `companion { }` block |
+| `04_CompanionBlock.kt` | the same `Color` from the type owner's side, via a `companion { }` block |
 
 ### 2. Backing fields — `02_backingfields/`
 
@@ -92,6 +98,25 @@ Two details worth knowing:
 | --- | --- |
 | `01_InvokeOperator.kt` | fake constructors in a companion block, and `invoke` as a companion extension |
 | `02_OfOperator.kt` | `of` backing collection literals — block only, never an extension (§1.3.4) |
+
+### 6. Resolution — `06_resolution/`
+
+| File | Shows |
+| --- | --- |
+| `01_Resolution.kt` | a companion extension wins over a companion object member; `T.Companion.foo()` to say otherwise |
+
+### 7. References, imports and reflection — `07_references/`
+
+| File | Shows |
+| --- | --- |
+| `01_ReferenceTypes.kt` | the same type as a companion block and as a companion object, plus a `JsonFactory` discovery pattern |
+| `02_ReferencesAndReflection.kt` | `Color::fromHex` in `map()`, `Color::Black` as a `KProperty0`, static imports, and what `kotlin-reflect` sees |
+
+Reflection finds companion block members under `staticFunctions` /
+`staticProperties`, never under `memberFunctions`, and `companionObject` is
+`null`. Patterns that ask a class for its companion object as a *value* cannot
+be migrated to a companion block at all — a block has no classifier and so
+cannot implement an interface.
 
 ## Run
 

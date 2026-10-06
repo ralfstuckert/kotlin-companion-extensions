@@ -9,6 +9,8 @@ repositories {
 }
 
 dependencies {
+    // Used by 07_references to show what reflection sees of a companion block.
+    implementation(kotlin("reflect"))
     testImplementation("junit:junit:4.13.2")
 }
 
@@ -30,6 +32,7 @@ tasks.test {
 // The examples, in the order used by the article. Each entry is the JVM class
 // generated for the corresponding file (a leading digit becomes `_`).
 val examples = listOf(
+    "examples.motivation._01_CompanionObjectExtensionKt",
     "examples.typelevel._01_InstanceExtensionKt",
     "examples.typelevel._02_CompanionFunctionKt",
     "examples.typelevel._03_CompanionPropertyKt",
@@ -44,6 +47,8 @@ val examples = listOf(
     "examples.javatypes._02_MoreJavaTypesKt",
     "examples.operators._01_InvokeOperatorKt",
     "examples.operators._02_OfOperatorKt",
+    "examples.resolution._01_ResolutionKt",
+    "examples.references._02_ReferencesAndReflectionKt",
 )
 
 fun taskNameOf(fqName: String) =
