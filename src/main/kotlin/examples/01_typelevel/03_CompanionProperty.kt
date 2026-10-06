@@ -1,5 +1,6 @@
-package examples.companion.extension
+package examples.typelevel
 
+// Properties work the same way - `val`, `var` and `const val` on type level.
 companion val User.Anonymous: User
     get() = User("Anonymous")
 

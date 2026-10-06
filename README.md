@@ -1,44 +1,95 @@
 # Kotlin Companion Extensions
 
-Runnable examples for an article about Kotlin companion blocks and companion extensions (KEEP-0449).
+Runnable examples for an article about Kotlin companion blocks and companion
+extensions ([KEEP-0449](https://github.com/Kotlin/KEEP/blob/main/proposals/KEEP-0449-companions-block-extension.md)).
 
-The project uses **Kotlin 2.5.0-Beta1** and the experimental compiler option:
+The project uses **Kotlin 2.5.0-Beta1** and the experimental compiler options:
 
 ```text
 -Xcompanion-blocks-and-extensions
+-Xcollection-literals
 ```
+
+## Topics
+
+The examples are ordered by topic. Each topic is one numbered directory under
+`src/main/kotlin/examples/`; the package names inside are plain
+(`examples.typelevel`, `examples.statics`, ...) so only the directory carries
+the ordering.
+
+### 1. Extension functions and properties on type level — `01_typelevel/`
+
+| File | Shows |
+| --- | --- |
+| `01_InstanceExtension.kt` | the baseline: an extension with an *instance* receiver |
+| `02_CompanionFunction.kt` | `companion fun User.anonymous()` — no companion object needed |
+| `03_CompanionProperty.kt` | `companion val` / `var` / `const val` on type level |
+| `04_CompanionBlock.kt` | the same from the type owner's side, via a `companion { }` block |
+
+### 2. Backing fields — `02_backingfields/`
+
+| File | Shows |
+| --- | --- |
+| `01_ExtensionPropertyLimits.kt` | why a regular extension property recomputes on every access |
+| `02_CompanionExtensionBackingField.kt` | companion extension properties may have initializers and backing fields (§1.3.5) |
+| `03_CompanionBlockBackingField.kt` | backing fields, `const val` and initialization order in a companion block |
+
+### 3. Compiled to static whenever possible — `03_static/`
+
+| File | Shows |
+| --- | --- |
+| `01_CompanionObjectStatic.kt` | the old way: `companion object` + `@JvmStatic`, plus the `Companion` allocation |
+| `02_CompanionBlockStatic.kt` | companion blocks become static members, companion extensions become statics on the file class |
+| `03_MultiplatformAndExpect.kt` | one annotation per platform (`@JvmStatic`, `@JsStatic`), and why `expect` generates no static |
+| `src/test/kotlin/examples/03_static/JUnitStaticTest.kt` | JUnit `@BeforeClass` works **without** `@JvmStatic` |
+
+Proof in bytecode:
+
+```bash
+./gradlew javapStatics
+```
+
+`Parser` has `public static final Parser parse(String)` and no `Parser$Companion`
+at all, while `LegacyParser` still carries `LegacyParser$Companion` and a static
+`Companion` field.
+
+### 4. Extending existing Java classes — `04_javatypes/`
+
+| File | Shows |
+| --- | --- |
+| `01_JavaTypeExtension.kt` | `companion fun LocalDate.fromGerman(...)` on a type you do not own |
+| `02_MoreJavaTypes.kt` | `UUID`, `File`, `String`, and the restrictions on companion receivers (§1.3.2) |
+
+### 5. `invoke()` and `of()` operators — `05_operators/`
+
+| File | Shows |
+| --- | --- |
+| `01_InvokeOperator.kt` | fake constructors in a companion block, and `invoke` as a companion extension |
+| `02_OfOperator.kt` | `of` backing collection literals — block only, never an extension (§1.3.4) |
 
 ## Run
 
-```bash
-./gradlew run
-```
-
-If the Gradle wrapper is not checked in yet, use a local Gradle installation once:
+Every example has its own `main`. Each one is a Gradle task in the `examples`
+group, named after its file:
 
 ```bash
-gradle wrapper
-gradle run
+./gradlew run02_CompanionFunction
+./gradlew run01_InvokeOperator
 ```
 
-## Examples
+Run all of them in topic order:
 
-The source files follow the progression used in the article:
+```bash
+./gradlew runAll
+```
 
-1. `01_InstanceExtension.kt` - regular extension functions and their receiver
-2. `02_CompanionObject.kt` - traditional companion objects
-3. `03_CompanionObjectExtension.kt` - extending an existing `User.Companion`
-4. `04_CompanionExtension.kt` - the new companion extension without a companion object
-5. `05_CompanionBlock.kt` - companion members without creating an object
-6. `06_CompanionProperties.kt` - companion `val`, `var`, `const val`, and backing state
-7. `07_JavaTypeExtension.kt` - companion extension on `java.time.LocalDate`
-8. `08_CompanionObjectUseCase.kt` - when an actual companion object is still useful
+Run the JUnit example:
 
-The examples deliberately use `User` throughout most of the project so that instance-level and companion-level APIs can be compared directly.
+```bash
+./gradlew test
+```
 
 ## Status
 
-Companion blocks and extensions are experimental in Kotlin 2.5.0-Beta1. Syntax and semantics may still change before stabilization.
-
-See KEEP-0449:
-https://github.com/Kotlin/KEEP/blob/main/proposals/KEEP-0449-companions-block-extension.md
+Companion blocks and extensions are experimental in Kotlin 2.5.0-Beta1.
+Syntax and semantics may still change before stabilization.
