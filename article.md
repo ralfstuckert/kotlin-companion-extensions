@@ -82,6 +82,14 @@ This is an old complaint. [KT-11968](https://youtrack.jetbrains.com/issue/KT-119
 prototype namespace-based solution for statics and static extensions"* — was filed in April 2016, and the
 KEEP still cites it as one of the issues it closes.
 
+And where it does work, what you get is thinner than it looks. `BrandPrimary` is at last the same as a regular
+extension property, which means it is a static getter taking the companion as a receiver. There is no field
+anywhere to put a value in, which is why an extension property may only ever have a `get()`.
+
+```java
+public static final Color getBrandPrimary(Color$Companion $this$BrandPrimary);
+```
+
 The second is that even the types we *can* extend are not in great shape. Here is what `Color` actually
 compiles to:
 
@@ -129,18 +137,18 @@ Which is why the solution comes in two parts.
 The first one is a single modifier:
 
 ```kotlin
-companion fun User.anonymous(): User = User("Anonymous")
+companion fun User.parse(line: String): User = User(line.substringBefore(','))
 companion val User.Anonymous: User get() = User("Anonymous")
 ```
 
 ```kotlin
-println(User.anonymous())   // User(name=Anonymous)
-println(User.Anonymous)     // User(name=Anonymous)
+println(User.parse("Alice,42"))   // User(name=Alice)
+println(User.Anonymous)           // User(name=Anonymous)
 ```
 
 `User` has no companion object here, and it does not need one. The `companion` modifier lifts the receiver
 from the *instance* to the *type*: where `fun User.greet()` is called on a `User`, `companion fun
-User.anonymous()` is called on `User` itself.
+User.parse()` is called on `User` itself.
 
 Which means there is nothing to call it *on*, and so there is no `this`:
 
@@ -293,9 +301,8 @@ val Config.derived: String get() = "derived from $name"  // recomputed on every 
 val Config.cached: String = compute()                    // error: cannot be initialized
 ```
 
-The reason is the one we saw with `max()`: an extension property is just a static getter taking the
-receiver as a parameter. There is no field to put the value in, and Kotlin cannot add one to a class it
-does not own.
+The reason is the one from section 2: an extension property is a static getter taking the receiver as a
+parameter, and a getter has nowhere to keep anything.
 
 A companion extension property is a different animal. Its receiver is the *type*, and there is exactly one
 of those — so there is no "which instance owns this field?" to answer, and the KEEP grants an exemption:

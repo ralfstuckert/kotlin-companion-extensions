@@ -19,13 +19,33 @@ class Color(val rgb: Int) {
 // Kotlin 1.0.
 val Color.Companion.BrandPrimary: Color get() = Color(0x6750A4)
 
+// But the extension is thinner than it looks. It is not added to the companion
+// object - that class was compiled long ago - it becomes a static function in
+// *this* file's class, taking the companion as an argument:
+//
+//   ./gradlew javapMotivation
+//
+//   public final class examples.motivation._01_CompanionObjectExtensionKt {
+//     public static final Color getBrandPrimary(Color$Companion);
+//   }
+//
+// A getter, and nothing else: there is no field anywhere to put a value in, so
+// an extension property may only ever have a `get()`.
+//
+//   val Color.Companion.BrandPrimary: Color = Color(0x6750A4)
+//   -> e: Extension property cannot be initialized because it has no backing field.
+//
+// Every access therefore allocates a new Color, while `Black` - a real static
+// field on the other side of the fence - is read once. See 03_backingfields for
+// how a companion extension lifts exactly this restriction.
+
 // The catch: it only works because there *is* a companion object. The author
 // of `LocalDate` never wrote one, so there is nothing to extend:
 //
 //   fun LocalDate.Companion.fromGerman(value: String): LocalDate   // <- does not compile
 //   e: Unresolved reference 'Companion'.
 //
-// See 04_javatypes/01_JavaTypeExtension.kt for how companion extensions fix this.
+// See 02_javatypes/01_JavaTypeExtension.kt for how companion extensions fix this.
 
 fun main() {
     println(Color.Black)

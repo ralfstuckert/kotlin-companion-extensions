@@ -21,7 +21,7 @@ fun main() {
 
     // ... and the collection literal that desugars to it.
     // Requires the -Xcollection-literals compiler flag.
-    val tags: Tags = ["kotlin", "keep", "companion"]
+    val tags: Tags = ["kotlin", "keep"]
     println(tags)
 
     println(Tags.Empty)

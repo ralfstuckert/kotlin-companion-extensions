@@ -12,7 +12,7 @@ import org.junit.Test
 //   class Tests {
 //       companion object {
 //           @BeforeClass @JvmStatic
-//           fun setup() { ... }
+//           fun setUpClass() { ... }
 //       }
 //   }
 //

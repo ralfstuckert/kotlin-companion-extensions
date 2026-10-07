@@ -4,11 +4,11 @@ package examples.resolution
 // extension of the same name?
 class Example {
     companion object {
-        fun foo() = "companion object"
+        fun foo() = 1
     }
 }
 
-companion fun Example.foo() = "companion extension"
+companion fun Example.foo() = 2
 
 // The rule: `T.foo()` is resolved against companion blocks and extensions
 // first, and only then as `T.Companion.foo()`. Blocks and extensions form
@@ -20,12 +20,12 @@ companion fun Example.foo() = "companion extension"
 // site to suggest a choice was made.
 
 fun main() {
-    println(Example.foo())           // companion extension
-    println(Example.Companion.foo()) // companion object - say so explicitly
+    println(Example.foo())           // 2 - the companion extension
+    println(Example.Companion.foo()) // 1 - companion object, said explicitly
 
     // The same precedence applies to callable references.
-    val viaExtension: () -> String = Example::foo
-    val viaObject: () -> String = Example.Companion::foo
+    val viaExtension: () -> Int = Example::foo
+    val viaObject: () -> Int = Example.Companion::foo
     println(viaExtension())
     println(viaObject())
 }

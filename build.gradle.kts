@@ -37,14 +37,14 @@ val examples = listOf(
     "examples.typelevel._02_CompanionFunctionKt",
     "examples.typelevel._03_CompanionPropertyKt",
     "examples.typelevel._04_CompanionBlockKt",
+    "examples.javatypes._01_JavaTypeExtensionKt",
+    "examples.javatypes._02_MoreJavaTypesKt",
     "examples.backingfields._01_ExtensionPropertyLimitsKt",
     "examples.backingfields._02_CompanionExtensionBackingFieldKt",
     "examples.backingfields._03_CompanionBlockBackingFieldKt",
     "examples.statics._01_CompanionObjectStaticKt",
     "examples.statics._02_CompanionBlockStaticKt",
     "examples.statics._03_MultiplatformAndExpectKt",
-    "examples.javatypes._01_JavaTypeExtensionKt",
-    "examples.javatypes._02_MoreJavaTypesKt",
     "examples.operators._01_InvokeOperatorKt",
     "examples.operators._02_OfOperatorKt",
     "examples.resolution._01_ResolutionKt",
@@ -81,5 +81,19 @@ tasks.register<Exec>("javapStatics") {
         "examples/statics/_02_CompanionBlockStaticKt.class",
         "examples/statics/LegacyParser.class",
         "examples/statics/LegacyParser\$Companion.class",
+    )
+}
+
+// The motivating example: a companion *object* extension is a static getter on
+// the file class, taking the companion as an argument - and has no field.
+tasks.register<Exec>("javapMotivation") {
+    group = "examples"
+    description = "Shows what an extension on a companion object compiles to"
+    dependsOn(tasks.named("compileKotlin"))
+    workingDir = layout.buildDirectory.dir("classes/kotlin/main").get().asFile
+    commandLine(
+        "javap", "-p",
+        "examples/motivation/_01_CompanionObjectExtensionKt.class",
+        "examples/motivation/Color.class",
     )
 }
