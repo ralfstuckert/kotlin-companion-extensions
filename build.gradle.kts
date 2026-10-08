@@ -1,7 +1,5 @@
 plugins {
     kotlin("jvm") version "2.5.0-Beta1"
-    // Applied by the `multiplatform` subproject; declared here so both share a version.
-    kotlin("multiplatform") version "2.5.0-Beta1" apply false
 }
 
 repositories {
@@ -44,7 +42,6 @@ val examples = listOf(
     "examples.backingfields._03_CompanionBlockBackingFieldKt",
     "examples.statics._01_CompanionObjectStaticKt",
     "examples.statics._02_CompanionBlockStaticKt",
-    "examples.statics._03_MultiplatformAndExpectKt",
     "examples.operators._01_InvokeOperatorKt",
     "examples.operators._02_OfOperatorKt",
     "examples.resolution._01_ResolutionKt",
