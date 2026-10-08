@@ -16,8 +16,10 @@ import org.junit.Test
 //       }
 //   }
 //
-// Forget it, and JUnit silently never runs the hook - the kind of bug the
-// KEEP calls out as problem #2.
+// Forget it, and nothing will tell you. It compiles, the test runs, the
+// fixture is never set up, and you are left debugging a NullPointerException
+// three stack frames away from the cause - the kind of bug the KEEP calls out
+// as problem #2.
 //
 // A companion block is static by construction, so the annotation is enough.
 class JUnitStaticTest {

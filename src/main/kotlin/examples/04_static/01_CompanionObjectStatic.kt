@@ -1,7 +1,5 @@
 package examples.statics
 
-// The classic way to get a JVM static member out of Kotlin:
-// a companion *object* plus a platform-specific annotation.
 class LegacyParser private constructor(val source: String) {
 
     companion object {
@@ -14,14 +12,6 @@ class LegacyParser private constructor(val source: String) {
     }
 }
 
-// Even with @JvmStatic the Companion class and its singleton instance are
-// still generated and allocated (KEEP problem #4):
-//
-//   ./gradlew compileKotlin
-//   javap -p -c build/classes/kotlin/main/examples/statics/LegacyParser*.class
-//
-// shows `LegacyParser$Companion`, a `public static final Companion Companion`
-// field, and the static `parse` delegating to `Companion.INSTANCE.parse(...)`.
 
 fun main() {
     println(LegacyParser.parse("x").source)

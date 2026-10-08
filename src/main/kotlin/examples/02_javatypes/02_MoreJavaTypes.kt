@@ -3,8 +3,6 @@ package examples.javatypes
 import java.io.File
 import java.util.UUID
 
-// Final Java classes, interfaces and Kotlin built-ins alike - the receiver
-// only has to be a declared classifier without type arguments (KEEP §1.3.2).
 companion fun UUID.zero(): UUID = UUID(0L, 0L)
 
 companion fun File.temp(name: String): File = File(System.getProperty("java.io.tmpdir"), name)

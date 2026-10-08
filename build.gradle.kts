@@ -86,6 +86,8 @@ tasks.register<Exec>("javapStatics") {
 
 // The motivating example: a companion *object* extension is a static getter on
 // the file class, taking the companion as an argument - and has no field.
+// The same output also shows what `Color` itself pays for the companion: a
+// `Companion` field, a synthetic accessor and a second class file.
 tasks.register<Exec>("javapMotivation") {
     group = "examples"
     description = "Shows what an extension on a companion object compiles to"
@@ -95,5 +97,21 @@ tasks.register<Exec>("javapMotivation") {
         "javap", "-p",
         "examples/motivation/_01_CompanionObjectExtensionKt.class",
         "examples/motivation/Color.class",
+        "examples/motivation/Color\$Companion.class",
+    )
+}
+
+// A regular extension property is a getter taking the receiver as a parameter;
+// a companion extension property has a real static field and no parameter at all.
+tasks.register<Exec>("javapBackingFields") {
+    group = "examples"
+    description = "Shows that only companion extension properties get a backing field"
+    dependsOn(tasks.named("compileKotlin"))
+    workingDir = layout.buildDirectory.dir("classes/kotlin/main").get().asFile
+    commandLine(
+        "javap", "-p",
+        "examples/backingfields/_01_ExtensionPropertyLimitsKt.class",
+        "examples/backingfields/_02_CompanionExtensionBackingFieldKt.class",
+        "examples/backingfields/Registry.class",
     )
 }

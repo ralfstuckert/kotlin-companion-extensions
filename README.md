@@ -25,7 +25,8 @@ the ordering.
 
 It also shows the second half of the problem: the extension compiles to a
 static getter on the *file* class, taking the companion as an argument, so it
-has no backing field and recomputes on every access.
+has no backing field and recomputes on every access — while `Color` itself
+pays for a `Companion` field, a synthetic accessor and a second class file.
 
 ```bash
 ./gradlew javapMotivation
@@ -54,6 +55,17 @@ has no backing field and recomputes on every access.
 | `01_ExtensionPropertyLimits.kt` | why a regular extension property recomputes on every access |
 | `02_CompanionExtensionBackingField.kt` | companion extension properties may have initializers and backing fields (§1.3.5) |
 | `03_CompanionBlockBackingField.kt` | backing fields, `const val` and initialization order in a companion block |
+
+Proof in bytecode:
+
+```bash
+./gradlew javapBackingFields
+```
+
+`getDerived(Config)` takes the receiver as a parameter and has no field, while
+`getDefaults()` takes nothing at all and reads a `private static final List
+defaults` initialized in `static {}` — the receiver type is erased from the
+signature entirely.
 
 ### 4. Compiled to static whenever possible — `04_static/`
 

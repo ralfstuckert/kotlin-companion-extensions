@@ -1,7 +1,5 @@
 package examples.operators
 
-// `of` is what backs collection literals. It may only live in a companion
-// block - unlike `invoke`, it may NOT be a companion extension (KEEP §1.3.4).
 class Tags private constructor(val values: List<String>) {
 
     companion {

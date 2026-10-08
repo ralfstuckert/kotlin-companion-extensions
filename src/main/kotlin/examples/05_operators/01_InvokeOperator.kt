@@ -2,11 +2,6 @@ package examples.operators
 
 import java.util.UUID
 
-// A type name is not a value, so operators are generally forbidden in
-// companion blocks - `Money + 1` must not become legal.
-//
-// `invoke` and `of` are the two exceptions: there the type name acts as a
-// scoping mechanism, not as a value.
 class Money private constructor(val cents: Long) {
 
     companion {
@@ -17,9 +12,6 @@ class Money private constructor(val cents: Long) {
     override fun toString() = "%d.%02d EUR".format(cents / 100, cents % 100)
 }
 
-// `invoke` is also the only operator allowed as a companion *extension*
-// (KEEP §1.3.4) - so constructor-like factories can be bolted onto foreign
-// types, including Java ones that never had a companion object to extend.
 companion operator fun UUID.invoke(value: String): UUID = UUID.fromString(value)
 
 fun main() {

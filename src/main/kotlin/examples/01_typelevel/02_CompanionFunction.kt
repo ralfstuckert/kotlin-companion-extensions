@@ -6,9 +6,6 @@ companion fun User.parse(line: String): User = User(line.substringBefore(','))
 
 companion fun User.named(name: String): User = User(name)
 
-// Companion extensions are top-level only (KEEP §1.3.1) and the receiver type
-// must be a plain classifier (KEEP §1.3.2):
-//   companion fun <T> T.broken(): T   -> does not compile
 
 companion fun User.describe(): String {
     // There is no `this` here: a companion extension has no value receiver,
