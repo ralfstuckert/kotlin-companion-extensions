@@ -39,4 +39,21 @@ In the days before [context parameters](https://medium.com/@ralf.stuckert/kotlin
 that would have been a painful limitation. Today it is much less so: if such a function needs additional
 scope, it can simply ask for it with a `context` parameter.
 
+Take the `Color` from the introduction, whose brand colour in any real application depends on the active
+theme. Being top level, `companion val Color.BrandPrimary: Color get() = Color(0x6750A4)` is one fixed
+colour, for everybody who imports it — there is no scope it could read a theme from. Unless we ask for one:
+
+[05_ContextParameter.kt](../src/main/kotlin/examples/01_typelevel/05_ContextParameter.kt):
+```kotlin
+context(theme: Theme)
+companion val Color.BrandPrimary: Color get() = Color(theme.primary)
+
+context(LightTheme) { Color.BrandPrimary }   // #6750A4
+context(DarkTheme) { Color.BrandPrimary }    // #D0BCFF
+```
+
+Outside such a scope the call does not compile — _"No context argument for 'theme: Theme' found"_.
+
+The examples use `-Xcontext-parameters` in addition to the two flags from the introduction.
+
 Next: [Companion Blocks](companion_blocks.md)

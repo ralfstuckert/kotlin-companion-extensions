@@ -20,7 +20,8 @@ If you need the other one, say so explicitly: `Example.Companion.foo()`.
 
 The rest of the limitations, briefly:
 
-- Companion extensions are **top-level only**.
+- Companion extensions are **top-level only**. If one needs additional scope, ask for it with a `context`
+  parameter — see [Companion Extensions](companion_extensions.md).
 - The receiver must be a plain classifier: no type parameters, no type arguments, no objects.
 - No `init` in a companion block; only functions and properties.
 - No classifier means no interface implementation and no passing it as a value — still a job for

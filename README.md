@@ -16,7 +16,7 @@ that let you explore the capabilities of Kotlin companion blocks and companion e
 
 ## Running the Examples
 The project uses **Kotlin 2.5.0-Beta1** and the experimental compiler options
-`-Xcompanion-blocks-and-extensions` and `-Xcollection-literals`.
+`-Xcompanion-blocks-and-extensions`, `-Xcollection-literals` and `-Xcontext-parameters`.
 
 Every example has its own `main`, exposed as a Gradle task in the `examples` group and named
 after its file:

@@ -17,6 +17,7 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xcompanion-blocks-and-extensions")
         freeCompilerArgs.add("-Xcollection-literals")
+        freeCompilerArgs.add("-Xcontext-parameters")
     }
 }
 
@@ -35,6 +36,7 @@ val examples = listOf(
     "examples.typelevel._02_CompanionFunctionKt",
     "examples.typelevel._03_CompanionPropertyKt",
     "examples.typelevel._04_CompanionBlockKt",
+    "examples.typelevel._05_ContextParameterKt",
     "examples.javatypes._01_JavaTypeExtensionKt",
     "examples.javatypes._02_MoreJavaTypesKt",
     "examples.backingfields._01_ExtensionPropertyLimitsKt",
