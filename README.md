@@ -1,5 +1,5 @@
 # Kotlin Companion Extensions and Blocks
-This repository provides examples for the corresponding article on medium
+This repository provides examples for [the corresponding article](https://medium.com/@ralf.stuckert/kotlin-companion-extensions-and-blocks-93484fd5a76b) on medium
 that let you explore the capabilities of Kotlin companion blocks and companion extensions
 ([KEEP-0449](https://github.com/Kotlin/KEEP/blob/main/proposals/KEEP-0449-companions-block-extension.md)).
 
